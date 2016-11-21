@@ -1,0 +1,8 @@
+COUNTRY=AU
+STATE=Victoria
+CITY=Melbourne
+ORG=Raisebook
+ORG_UNIT=Engineering
+EMAIL=engineering@raisebook.com
+CN=Raisebook Engineering Certificate Authority
+CN_INTERMEDIATE=Raisebook Engineering Intermediate Certificate

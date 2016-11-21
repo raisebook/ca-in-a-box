@@ -79,7 +79,7 @@ fi
 
 # Load variables from file if needed
 if [ "${config_file}" != "<none>" ]; then
-    if [[ ! -f "${config_file}" ]]; then
+    if [[ ! -e "${config_file}" ]]; then
       echo "The file ${config_file} does not exists" >&2
       echo "$usage"
       exit 1

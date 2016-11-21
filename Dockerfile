@@ -22,6 +22,7 @@ RUN mkdir -p intermediate/certs intermediate/crl intermediate/csr \
 
 
 VOLUME /root/cfg
+VOLUME /root/output
 COPY ./openssl.conf.tmpl /root/ca/openssl.conf.tmpl
 COPY ./openssl-intermediate.conf.tmpl /root/ca/openssl-intermediate.conf.tmpl
 

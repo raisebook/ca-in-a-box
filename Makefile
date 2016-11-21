@@ -14,7 +14,7 @@ push:
 	docker push $(NAME):latest
 
 run:
-	docker run -it --rm -v `pwd`/config/:/root/cfg  $(NAME):$(VERSION)
+	docker run -it --rm -v `pwd`/config/:/root/cfg -v `pwd`/output:/root/output $(NAME):$(VERSION)
 
 clean:
 	docker rmi $(NAME):$(VERSION)

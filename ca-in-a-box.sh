@@ -15,7 +15,6 @@ function get_ca_password {
 }
 
 function load_s3_data {
-  mkdir /tmp/ca-data
   aws s3 sync --acl private --sse aws:kms --sse-kms-key-id "${CA_KMS_KEY}" "s3://${CA_BUCKET}/" "${DIR}/"
 }
 
@@ -30,6 +29,17 @@ function save_s3_data {
 
 function generate_initial_configs {
   if [ ! -f ${DIR}/openssl.conf ]; then
+    mkdir certs crl newcerts private
+    chmod 700 private
+    touch index.txt
+    echo 1000 > serial
+
+    mkdir -p intermediate/certs intermediate/crl intermediate/csr intermediate/newcerts intermediate/private
+    chmod 700 intermediate/private
+    touch intermediate/index.txt
+    echo 1000 > intermediate/serial
+    echo 1000 > intermediate/crlnumber
+
     templater.sh /root/openssl.conf.tmpl -f /root/cfg/config.txt > openssl.conf
     templater.sh /root/openssl-intermediate.conf.tmpl -f /root/cfg/config.txt > intermediate/openssl.conf
   fi

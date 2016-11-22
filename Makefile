@@ -1,16 +1,11 @@
-all: build load run save
+all: build run
 
 build:
 	docker-compose build
 
 push:
-	docker.brutalbits.com/joffotron/ca-in-a-box:latest
-
-load:
-# 	aws s3 cp "s3://${CA_BUCKET}/root-ca.tar" ./root-ca.tar
-# 	docker
-
-save:
+	docker tag ca-in-a-box:latest docker.brutalbits.com/joffotron/ca-in-a-box:latest
+	docker push docker.brutalbits.com/joffotron/ca-in-a-box:latest
 
 run:
 	docker-compose run --rm ca_in_a_box

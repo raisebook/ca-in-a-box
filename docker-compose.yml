@@ -9,6 +9,7 @@ services:
     image: ca-in-a-box:latest
     tmpfs:
       - /tmp
+      - /root/ca
     volumes:
       - ./config/:/root/cfg
       - ./output/:/root/output

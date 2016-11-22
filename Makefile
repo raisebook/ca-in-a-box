@@ -1,20 +1,19 @@
-NAME = docker.brutalbits.com/joffotron/ca-in-a-box
-VERSION = 1
-
-all: build tag_latest
+all: build load run save
 
 build:
-	docker build -t $(NAME):$(VERSION) .
-
-tag_latest:
-	docker tag $(NAME):$(VERSION) $(NAME):latest
+	docker-compose build
 
 push:
-	docker push $(NAME):$(VERSION)
-	docker push $(NAME):latest
+	docker.brutalbits.com/joffotron/ca-in-a-box:latest
+
+load:
+# 	aws s3 cp "s3://${CA_BUCKET}/root-ca.tar" ./root-ca.tar
+# 	docker
+
+save:
 
 run:
-	docker run -it --rm -v `pwd`/config/:/root/cfg -v `pwd`/output:/root/output $(NAME):$(VERSION)
+	docker-compose run --rm ca_in_a_box
 
 clean:
-	docker rmi $(NAME):$(VERSION)
+	docker rmi docker.brutalbits.com/joffotron/ca-in-a-box:latest

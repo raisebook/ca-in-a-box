@@ -7,11 +7,32 @@ export PATH=${PATH}:/usr/local/bin
 DIR=/root/ca
 cd /root/ca
 
-templater.sh openssl.conf.tmpl -f /root/cfg/config.txt > openssl.conf
-templater.sh openssl-intermediate.conf.tmpl -f /root/cfg/config.txt > intermediate/openssl.conf
+: "${CA_BUCKET:?"Need set the S3 Bucket where we store the CA Data"}"
+: "${CA_KMS_KEY:?"Need set the KMS Key Name to encrypt the CA Data"}"
 
 function get_ca_password {
   read -s -r -p "Enter the Server CA Password: " CA_PASS
+}
+
+function load_s3_data {
+  mkdir /tmp/ca-data
+  aws s3 sync --acl private --sse aws:kms --sse-kms-key-id "${CA_KMS_KEY}" "s3://${CA_BUCKET}/" "${DIR}/"
+}
+
+function save_s3_data {
+  read -p "Commit changes to shared storage? (Y/N) " -n 1 -r
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    aws s3 sync --acl private --sse aws:kms --sse-kms-key-id "${CA_KMS_KEY}" "${DIR}/" "s3://${CA_BUCKET}/"
+    echo ""
+    echo "CA Updated!"
+  fi
+}
+
+function generate_initial_configs {
+  if [ ! -f ${DIR}/openssl.conf ]; then
+    templater.sh /root/openssl.conf.tmpl -f /root/cfg/config.txt > openssl.conf
+    templater.sh /root/openssl-intermediate.conf.tmpl -f /root/cfg/config.txt > intermediate/openssl.conf
+  fi
 }
 
 function create_root_cert {
@@ -80,9 +101,9 @@ function create_server_cert {
     chmod 400 ${SERVER_CN}/server.key.pem
 
     echo "[Server] Generate CSR"
-    templater.sh openssl-intermediate.conf.tmpl \
+    templater.sh /root/openssl-intermediate.conf.tmpl \
                  -f <(cat /root/cfg/config.txt | sed "s/^CN_INTERMEDIATE.*$/CN_INTERMEDIATE=${SERVER_CN}/") \
-                > ${SERVER_CN}/openssl.conf
+                 > ${SERVER_CN}/openssl.conf
 
     openssl req -config ${SERVER_CN}/openssl.conf \
                 -key ${SERVER_CN}/server.key.pem \
@@ -103,7 +124,7 @@ function create_server_cert {
   fi
 }
 
-function output_server_cert {
+function export_server_cert {
   if [ -f ${DIR}/${SERVER_CN}/server.key.pem ]; then
     cp ${SERVER_CN}/server.cert.pem /root/output/${SERVER_CN}.cert.pem
     cp ${SERVER_CN}/server.key.pem /root/output/${SERVER_CN}.key.pem
@@ -112,7 +133,12 @@ function output_server_cert {
 }
 
 get_ca_password
+load_s3_data
+generate_initial_configs
+
 create_root_cert
 create_intermediate_cert
 create_server_cert
-output_server_cert
+export_server_cert
+
+save_s3_data

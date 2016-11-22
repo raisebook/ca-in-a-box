@@ -1,8 +1,11 @@
-COUNTRY=AU
-STATE=Victoria
-CITY=Melbourne
-ORG=Raisebook
+COUNTRY=WS
+STATE=Crownlands
+CITY=Kings Landing
+ORG=House Lannister
 ORG_UNIT=Engineering
-EMAIL=engineering@raisebook.com
-CN=Raisebook Engineering Certificate Authority
-CN_INTERMEDIATE=Raisebook Engineering Intermediate Certificate
+EMAIL=joffrey@lannister.org
+CN=Westeros Engineering Certificate Authority
+CN_INTERMEDIATE=Westeros Engineering Intermediate Certificate
+
+CA_BUCKET=my-ca-s3-bucket-name
+CA_KMS_KEY=alias/MyKMSKeyName

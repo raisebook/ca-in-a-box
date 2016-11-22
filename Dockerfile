@@ -1,6 +1,10 @@
 FROM alpine:latest
+MAINTAINER joff@joff.codes
+ENTRYPOINT ["/sbin/tini-static", "--"]
+CMD ["/usr/local/bin/ca-in-a-box.sh"]
 
-RUN apk --update add bash openssl
+RUN apk --update add bash openssl ca-certificates py-pip
+RUN pip install awscli
 
 WORKDIR /root/ca
 
@@ -21,11 +25,8 @@ RUN mkdir -p intermediate/certs intermediate/crl intermediate/csr \
     echo 1000 > intermediate/crlnumber
 
 
+COPY ./openssl.conf.tmpl /root/openssl.conf.tmpl
+COPY ./openssl-intermediate.conf.tmpl /root/openssl-intermediate.conf.tmpl
+
 VOLUME /root/cfg
 VOLUME /root/output
-COPY ./openssl.conf.tmpl /root/ca/openssl.conf.tmpl
-COPY ./openssl-intermediate.conf.tmpl /root/ca/openssl-intermediate.conf.tmpl
-
-ENTRYPOINT ["/sbin/tini-static", "--"]
-
-CMD ["/usr/local/bin/ca-in-a-box.sh"]

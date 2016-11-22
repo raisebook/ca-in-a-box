@@ -1,6 +1,17 @@
 ---
-version: 2
+version: "2"
 
-volumes:
-  - /ca
-
+services:
+  ca_in_a_box:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ca-in-a-box:latest
+    tmpfs:
+      - /tmp
+    volumes:
+      - ./config/:/root/cfg
+      - ./output/:/root/output
+      - $HOME/.aws:/root/.aws:ro
+    env_file:
+      - ./config/config.txt

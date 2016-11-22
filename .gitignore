@@ -1,4 +1,5 @@
 .iml
 .idea
 output
-root-ca.tar
+config/config.txt
+

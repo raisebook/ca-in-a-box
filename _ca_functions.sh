@@ -142,5 +142,6 @@ function export_server_cert {
 function export_root_cert {
   if [ -f ${DIR}/certs/ca.cert.pem ]; then
     cp ${DIR}/certs/ca.cert.pem /root/output/root-ca.cert.pem
+    cp intermediate/certs/ca-chain.cert.pem /root/output/ca-chain.cert.pem
   fi
 }

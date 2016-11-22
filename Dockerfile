@@ -10,7 +10,7 @@ WORKDIR /root/ca
 
 COPY templater.sh /usr/local/bin/
 COPY tini-static /sbin/
-COPY ca-in-a-box.sh /usr/local/bin/
+COPY ca-in-a-box.sh export-root.sh _ca_functions.sh /usr/local/bin/
 
 COPY ./openssl.conf.tmpl /root/openssl.conf.tmpl
 COPY ./openssl-intermediate.conf.tmpl /root/openssl-intermediate.conf.tmpl

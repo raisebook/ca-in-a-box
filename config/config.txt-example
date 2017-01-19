@@ -1,3 +1,8 @@
+# - Always configure these values -
+CA_BUCKET=my-ca-s3-bucket-name
+CA_KMS_KEY=alias/MyKMSKeyName
+
+# - Only set in the below values if you are doing the first-time CA setup -
 COUNTRY=WS
 STATE=Crownlands
 CITY=Kings Landing
@@ -7,5 +12,3 @@ EMAIL=joffrey@lannister.org
 CN=Westeros Engineering Certificate Authority
 CN_INTERMEDIATE=Westeros Engineering Intermediate Certificate
 
-CA_BUCKET=my-ca-s3-bucket-name
-CA_KMS_KEY=alias/MyKMSKeyName

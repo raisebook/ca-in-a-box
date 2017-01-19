@@ -15,3 +15,7 @@ export_root:
 
 clean:
 	docker rmi docker.brutalbits.com/joffotron/ca-in-a-box:latest
+
+setup:
+	if [ ! -f config/config.txt ]; then cp config/config.txt-example config/config.txt; fi
+	${EDITOR} config/config.txt

@@ -42,6 +42,15 @@ This is the CN for the actual certificate  for the project you are working on, e
 This will generate, and once accepted, will ask you if you want to commit the new certificate to shared storage. 
 Saying yes to this will upload the newly generated certificate and key (in the output/ dir), to S3, so that others may use it.  
 
+2. Copy the resulting certificate and key file in to the proxy project
+
+```
+cp output/[common-name].cert.pem [path to proxy]/[common-name].crt
+cp output/[common-name].key.pem [path to proxy]/[common-name].key
+```
+
+Don't forget to add and commit the changes to the proxy project.
+
 ## Installing the Root Certificate
 
 In order to have these generated certificates accepted on development machines (again, don't use these in production!), you must install the 

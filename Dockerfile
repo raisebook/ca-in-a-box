@@ -3,7 +3,7 @@ MAINTAINER joff@joff.codes
 ENTRYPOINT ["/sbin/tini-static", "--"]
 CMD ["/usr/local/bin/ca-in-a-box.sh"]
 
-RUN apk --update add bash openssl ca-certificates py-pip
+RUN apk --update add bash openssl ca-certificates py2-pip
 RUN pip install awscli
 
 WORKDIR /root/ca

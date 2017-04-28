@@ -108,16 +108,16 @@ function create_server_cert {
     chmod 400 ${SERVER_CN}/server.key.pem
 
     echo "[Server] Generate CSR"
-    templater.sh /root/openssl-intermediate.conf.tmpl \
+    SERVER_CN=${SERVER_CN} templater.sh /root/openssl-intermediate.conf.tmpl \
                  -f <(cat /root/cfg/config.txt | sed "s/^CN_INTERMEDIATE.*$/CN_INTERMEDIATE=${SERVER_CN}/") \
                  > ${SERVER_CN}/openssl.conf
-
+    
     openssl req -config ${SERVER_CN}/openssl.conf \
                 -key ${SERVER_CN}/server.key.pem \
                 -new -sha256 -out ${SERVER_CN}/server.csr.pem
 
     echo "[Server] Generate Certificate"
-    openssl ca -config intermediate/openssl.conf \
+    openssl ca -config ${SERVER_CN}/openssl.conf \
         -extensions server_cert -days 3650 -notext -md sha256 \
         -passin pass:${CA_PASS} \
         -in ${SERVER_CN}/server.csr.pem \
